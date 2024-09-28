@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Check if a file name was provided
+if [ -z "$1" ]; then
+  echo "Usage: ./build_sfml.sh <source_file>"
+  exit 1
+fi
+
+# Extract file name without extension
+FILE_NAME=$(basename "$1" .cpp)
+
+# Compile the provided .cpp file
+g++ -c "$1"
+if [ $? -ne 0 ]; then
+  echo "Compilation failed."
+  exit 1
+fi
+
+# Link the object file and create the executable
+g++ "$FILE_NAME.o" -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+if [ $? -ne 0 ]; then
+  echo "Linking failed."
+  exit 1
+fi
+
+# Run the executable
+./sfml-app
